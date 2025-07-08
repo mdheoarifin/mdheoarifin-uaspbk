@@ -1,0 +1,94 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "nama": "Administrator",
+      "email": "admin@tokomakanan.com"
+    },
+    {
+      "id": "2",
+      "username": "staf1",
+      "password": "staf123",
+      "role": "staf",
+      "nama": "Staf Satu",
+      "email": "staf1@tokomakanan.com"
+    },
+    {
+      "id": "3",
+      "username": "pelanggan1",
+      "password": "pelanggan123",
+      "role": "pelanggan",
+      "nama": "Pelanggan Satu",
+      "email": "pelanggan1@gmail.com",
+      "telepon": "081234567890"
+    }
+  ],
+  "produk": [
+    {
+      "id": "1",
+      "nama": "Nasi Goreng Special",
+      "harga": 25000,
+      "deskripsi": "Nasi goreng dengan telur, ayam, dan sayuran",
+      "kategori": "Makanan",
+      "stok": 50,
+      "gambar": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300"
+    },
+    {
+      "id": "2",
+      "nama": "Mie Ayam",
+      "harga": 20000,
+      "deskripsi": "Mie ayam dengan pangsit dan bakso",
+      "kategori": "Makanan",
+      "stok": 30,
+      "gambar": "https://images.unsplash.com/photo-1552611052-33e04de081de?w=300"
+    },
+    {
+      "id": "3",
+      "nama": "Es Teh Manis",
+      "harga": 5000,
+      "deskripsi": "Es teh manis segar",
+      "kategori": "Minuman",
+      "stok": 100,
+      "gambar": "https://images.unsplash.com/photo-1558857563-b371033873b8?w=300"
+    }
+  ],
+  "pesanan": [
+    {
+      "id": "1f38",
+      "userId": "3",
+      "items": [
+        {
+          "produkId": "1",
+          "nama": "Nasi Goreng Special",
+          "harga": 25000,
+          "jumlah": 1,
+          "gambar": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300"
+        }
+      ],
+      "total": 25000,
+      "status": "selesai",
+      "tanggal": "2025-07-07T00:09:00.011Z",
+      "alamat": "jl hr soebrantas panam,pekanbaru."
+    },
+    {
+      "id": "d780",
+      "userId": "3",
+      "items": [
+        {
+          "produkId": "1",
+          "nama": "Nasi Goreng Special",
+          "harga": 25000,
+          "jumlah": 1,
+          "gambar": "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300"
+        }
+      ],
+      "total": 25000,
+      "status": "selesai",
+      "tanggal": "2025-07-07T13:08:39.461Z",
+      "alamat": "jl hr soebrantas panam"
+    }
+  ]
+}
