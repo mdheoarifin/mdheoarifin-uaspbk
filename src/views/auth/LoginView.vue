@@ -4,7 +4,7 @@
       <!-- Left Side - Image/Banner -->
       <div class="login-banner">
         <div class="banner-content">
-          <h1 class="brand-title">🍽️ DHEOFOOD</h1>
+          <h1 class="brand-title">🍽️ Toko Makanan Online</h1>
           <p class="brand-tagline">Pesan makanan favoritmu dengan mudah!</p>
           <div class="features">
             <div class="feature-item">
@@ -76,6 +76,7 @@
                   type="button"
                   @click="showPassword = !showPassword"
                   class="password-toggle"
+                  tabindex="-1"
                 >
                   {{ showPassword ? '👁️' : '👁️‍🗨️' }}
                 </button>
@@ -87,7 +88,12 @@
               {{ error }}
             </div>
             
-            <button type="submit" class="btn btn-primary btn-login" :disabled="loading">
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-login" 
+              :disabled="loading || !formData.username || !formData.password"
+              @click.prevent="handleLogin"
+            >
               <span v-if="!loading">Login</span>
               <span v-else class="loading-spinner">
                 <span class="spinner"></span>
@@ -96,28 +102,28 @@
             </button>
           </form>
           
-         <div class="login-demo">
-  <p class="demo-title">Pilih Role untuk Demo:</p>
-  <div class="demo-accounts">
-    <button @click="fillDemo('admin')" class="demo-btn admin">
-      <span class="role-icon">👨‍💼</span>
-      <span class="role-title">Admin</span>
-      <span class="role-desc">Kelola produk & laporan</span>
-    </button>
-    <button @click="fillDemo('staf')" class="demo-btn staf">
-      <span class="role-icon">👷</span>
-      <span class="role-title">Staf</span>
-      <span class="role-desc">Proses pesanan</span>
-    </button>
-    <button @click="fillDemo('pelanggan')" class="demo-btn pelanggan">
-      <span class="role-icon">🛍️</span>
-      <span class="role-title">Pelanggan</span>
-      <span class="role-desc">Pesan makanan</span>
-    </button>
-  </div>
-  <p class="demo-note">
-    Klik salah satu tombol di atas untuk login sebagai role tersebut
-  </p>
+          <div class="login-demo">
+            <p class="demo-title">Demo Accounts:</p>
+            <div class="demo-accounts">
+              <button @click="fillDemo('admin')" class="demo-btn admin" type="button">
+                <span class="role-icon">👨‍💼</span>
+                <span class="role-title">Admin</span>
+                <span class="role-desc">Kelola produk & laporan</span>
+              </button>
+              <button @click="fillDemo('staf')" class="demo-btn staf" type="button">
+                <span class="role-icon">👷</span>
+                <span class="role-title">Staf</span>
+                <span class="role-desc">Proses pesanan</span>
+              </button>
+              <button @click="fillDemo('pelanggan')" class="demo-btn pelanggan" type="button">
+                <span class="role-icon">🛍️</span>
+                <span class="role-title">Pelanggan</span>
+                <span class="role-desc">Pesan makanan</span>
+              </button>
+            </div>
+            <p class="demo-note">
+              💡 Klik salah satu role di atas untuk mengisi form login, kemudian klik tombol "Login"
+            </p>
           </div>
         </div>
       </div>
@@ -154,46 +160,24 @@ export default {
     const fillDemo = (role) => {
       formData.value = { ...demoAccounts[role] }
       error.value = ''
-      // Just fill the form, don't auto-submit
     }
     
     const handleLogin = async () => {
       loading.value = true
       error.value = ''
       
-      try {
-        console.log('Attempting login with:', formData.value)
-        
-        const result = await authStore.login(
-          formData.value.username,
-          formData.value.password
-        )
-        
-        console.log('Login result:', result)
-        
-        if (result.success) {
-          // Redirect based on role
-          const role = result.user.role
-          console.log('User role:', role)
-          
-          if (role === 'admin') {
-            await router.push('/dashboard')
-          } else if (role === 'staf') {
-            await router.push('/dashboard')
-          } else if (role === 'pelanggan') {
-            await router.push('/menu')
-          } else {
-            await router.push('/dashboard')
-          }
-        } else {
-          error.value = result.error || 'Login gagal'
-        }
-      } catch (err) {
-        console.error('Login error:', err)
-        error.value = 'Terjadi kesalahan saat login'
-      } finally {
-        loading.value = false
+      const result = await authStore.login(
+        formData.value.username,
+        formData.value.password
+      )
+      
+      if (result.success) {
+        router.push('/dashboard')
+      } else {
+        error.value = result.error
       }
+      
+      loading.value = false
     }
     
     return {
@@ -231,14 +215,15 @@ export default {
 }
 
 /* Banner Side */
-.banner-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.login-banner {
+  flex: 1;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
   overflow: hidden;
-  z-index: 1; /* ditambahkan agar tidak menutupi konten */
 }
 
 .banner-content {
@@ -303,7 +288,7 @@ export default {
   width: 300px;
   height: 300px;
   top: -150px;
-  right: 0; /* perbaiki posisi kanan */
+  right: -100px;
 }
 
 .circle-2 {
@@ -374,7 +359,7 @@ export default {
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-size: 1rem;
-   transition: border-color 0.3s ease, background 0.3s ease;
+  transition: all 0.3s ease;
   background: #f8f9fa;
 }
 
@@ -423,7 +408,7 @@ export default {
   margin-top: 2rem;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-login:hover:not(:disabled) {
@@ -474,42 +459,19 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
 }
-/* Update demo button styles */
+
 .demo-btn {
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   border: 2px solid #e0e0e0;
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  text-align: center;
-}
-
-.role-title {
-  font-weight: 600;
-  font-size: 1rem;
-  color: #333;
-}
-
-.role-desc {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.demo-note {
-  text-align: center;
+  gap: 0.25rem;
   font-size: 0.875rem;
-  color: #666;
-  margin-top: 1rem;
-}
-
-.demo-btn {
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
 }
 
 .demo-btn:hover {
@@ -532,7 +494,6 @@ export default {
   color: #4CAF50;
 }
 
-
 .role-icon {
   font-size: 1.5rem;
 }
@@ -554,11 +515,10 @@ export default {
 .alert-icon {
   font-size: 1.2rem;
 }
+
 .animate-shake {
   animation: shake 0.5s ease-in-out;
-  animation-iteration-count: 1;
 }
-
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
